@@ -1,0 +1,59 @@
+```js
+import { createStore } from 'redux';
+// 初始值
+let defaultValue = 0;
+// reducer 
+function countReducer(state = defaultValue, action) {
+  switch(action.type) {
+    case "ADD": 
+      return state + action.payload;
+    case "MINUS":
+      return state - action.payload;
+    default:
+      return state;
+  }
+}
+// store上有getState 数据
+// store上有dispatch 派发action
+// store上有subscribe 监听
+
+// 创建store 参数reducer
+const store = createStore(countReducer);
+
+export default store;
+```
+
+```js
+import React, { Component } from 'react'
+import store from '../store/store'
+
+// action
+const Add = {type: "ADD", payload: 1};
+const MINUS = {type: "MINUS", payload: 1};
+
+class UseRedux extends Component {
+  componentDidMount() {
+    store.subscribe(() => {
+      this.forceUpdate();
+    })
+  }
+  add = () => {
+    store.dispatch(Add);
+    console.log(store.getState());
+  }
+  minus = () => {
+    store.dispatch(MINUS);
+    console.log(store.getState());
+  }
+  render() {
+    return (
+      <>
+        <span>{store.getState()}</span>
+        <button onClick={this.add}>add</button>
+        <button onClick={this.minus}>minus</button>
+      </>
+    )
+  }
+}
+export default UseRedux
+```
